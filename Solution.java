@@ -1,6 +1,7 @@
 package com.javarush.task.PetProject.Viselica01;
 
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Solution {
@@ -18,14 +19,15 @@ public class Solution {
 
     public static void main(String[] args) {
         boolean continieGame = true;
+        boolean doneYesNo = false;
 
         while (continieGame) {
 
             Scanner scanner = new Scanner(System.in);
             // меню (старт)
             Menu.menuStart();
-
             String variantStart = scanner.nextLine();
+
 
             if (variantStart.equalsIgnoreCase("Да")) {
                 System.out.println("Игра началась");
@@ -41,11 +43,24 @@ public class Solution {
                 System.out.println(slovar.getUnknownMask().toString());
 
                 while (Error.countError > 0) {
+                    boolean doneChislo = false;
+                    Error.sovpalo = false;
+                    char simvol = '\n';
 
                     System.out.println("Введите одну букву для отгадывания");
                     Scanner scannerBukva = new Scanner(System.in);
-                    Error.sovpalo = false;
-                    char simvol = scannerBukva.next(".").charAt(0); // берет строго одну букву
+
+                    while (!doneChislo) {
+                        try {
+                            simvol = scannerBukva.next(".").charAt(0); // берет строго одну букву
+                            doneChislo = true;
+                        } catch (InputMismatchException inputMismatchException) {
+                            System.out.println("Вводите именно букву");
+                            scannerBukva.nextLine(); // очищаем неверный текущий scanner
+                        }
+
+                    }
+
 
                     for (int i = 0; i < slovoIgru.length(); i++) {
                         if (slovoIgru.charAt(i) == simvol) { // если есть совпадение
@@ -87,10 +102,6 @@ public class Solution {
                 continieGame = false;
             }
         }
-
-
-
-
 
     }
 }
