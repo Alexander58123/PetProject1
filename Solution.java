@@ -1,50 +1,41 @@
 package com.javarush.task.PetProject.Viselica01;
 
+import com.javarush.task.PetProject.Viselica01.Other.Dictionary;
+import com.javarush.task.PetProject.Viselica01.Other.Error;
+import com.javarush.task.PetProject.Viselica01.Other.Menu;
+
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Solution {
 
-    /*
-    - нужен файл со словами в им. падеже
-    - из файла добавляем в List слова
-    - при отображении будет маска ******, когда угадываешь отображаются буквы ***а***а
-    - счетчик ошибок
-    - когда ошибка определенная, то рисуется виселица и другие части с человеком
-
-    - обработка когда отгадали слово - успех и на новый переход игры
-    - при проигрышке, заново предлагается игра
-     */
-
     public static void main(String[] args) {
         boolean continieGame = true;
         boolean doneYesNo = false;
 
         while (continieGame) {
-
             Scanner scanner = new Scanner(System.in);
             // меню (старт)
             Menu.menuStart();
             String variantStart = scanner.nextLine();
-
 
             if (variantStart.equalsIgnoreCase("Да")) {
                 System.out.println("Игра началась");
                 System.out.println("-----------------");
 
                 // генерируем из списка (словаря)
-                Slovar slovar = new Slovar(new File("E:\\slova.txt"));
+                Dictionary dictionary = new Dictionary(new File("resources/words.txt"));
 
-                String slovoIgru = slovar.getUnknown(); // слово текущего раунда
-                StringBuilder slovoIgruMask = slovar.getUnknownMask();
+                String slovoIgru = dictionary.getUnknownRandom(); // слово текущего раунда
+                StringBuilder slovoIgruMask = dictionary.getUnknownMask();
 
-                System.out.println("Слово из " + slovar.getUnknownMask().length() + " букв");
-                System.out.println(slovar.getUnknownMask().toString());
+                System.out.println("Слово из " + dictionary.getUnknownMask().length() + " букв");
+                System.out.println(dictionary.getUnknownMask().toString());
 
-                while (Error.countError > 0) {
+                while (com.javarush.task.PetProject.Viselica01.Other.Error.countError > 0) {
                     boolean doneChislo = false;
-                    Error.sovpalo = false;
+                    com.javarush.task.PetProject.Viselica01.Other.Error.matches = false;
                     char simvol = '\n';
 
                     System.out.println("Введите одну букву для отгадывания");
@@ -61,15 +52,14 @@ public class Solution {
 
                     }
 
-
                     for (int i = 0; i < slovoIgru.length(); i++) {
                         if (slovoIgru.charAt(i) == simvol) { // если есть совпадение
                             slovoIgruMask.setCharAt(i, simvol);
-                            Error.sovpalo = true;
+                            com.javarush.task.PetProject.Viselica01.Other.Error.matches = true;
                         }
                     }
                     // если совпадение буквы
-                    if (Error.sovpalo) {
+                    if (com.javarush.task.PetProject.Viselica01.Other.Error.matches) {
                         System.out.println(slovoIgruMask);
 
                         // если текущее = слову-маске (успех)
@@ -80,23 +70,20 @@ public class Solution {
                         }
 
                     } else { // ошибка и уменьшаем кол-во попыток
-                        System.err.println("Ошибка! Осталось попыток:" + (--Error.countError));
+                        System.err.println("Ошибка! Осталось попыток:" + (--com.javarush.task.PetProject.Viselica01.Other.Error.countError));
                         // не выводилось после проигрыша слово-маска
-                        if (Error.countError == 0) {
+                        if (com.javarush.task.PetProject.Viselica01.Other.Error.countError == 0) {
                             System.err.println("Уровень закончен!");
                         }
 
-                       // Error.countError++;
-
+                        // Error.countError++;
                     }
-
-
                 }
 
                 // когда исчерпаны попытки
                 Error.countError = 3;
 
-            // когда (Да/нет) из главного
+                // когда (Да/нет) из главного
             } else {
                 System.err.println("Игра закончена!!!");
                 continieGame = false;

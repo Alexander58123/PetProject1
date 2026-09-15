@@ -1,4 +1,4 @@
-package com.javarush.task.PetProject.Viselica01;
+package com.javarush.task.PetProject.Viselica01.Other;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -7,19 +7,18 @@ import java.util.Random;
 
 // где будем хранить слова для отгадывания
 
-public class Slovar {
+public class Dictionary {
 
     private List<String> slova = new ArrayList<>();
-    private String unknown; // рандомное
+    private String unknownRandom; // рандомное
     private StringBuilder unknownMask; // под *****
 
     // конструктор
-    public Slovar(File file) {
+    public Dictionary(File file) {
         BufferedReader bufferedReader = null;
 
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
-
             while (bufferedReader.ready()) {
                 slova.add(bufferedReader.readLine());
             }
@@ -30,8 +29,8 @@ public class Slovar {
             e.printStackTrace();
         }
 
-        initialUnknown(); // инициализировали unknown слово
-        initialUnknownMask(); // инициир. unknown c маской
+        initialUnknownRandom(); // инициализировали unknownRandom слово
+        initialUnknownMask(); // инициир. unknownRandom c маской
 
     }
 
@@ -39,8 +38,8 @@ public class Slovar {
         return slova;
     }
 
-    public String getUnknown() {
-        return unknown;
+    public String getUnknownRandom() {
+        return unknownRandom;
     }
 
     public StringBuilder getUnknownMask() {
@@ -51,15 +50,15 @@ public class Slovar {
         slova.add(string);
     }
 
-    private void initialUnknown() {
+    private void initialUnknownRandom() {
         Random random = new Random();
         int randomInt = random.nextInt(slova.size());
-        unknown = slova.get(randomInt);
+        unknownRandom = slova.get(randomInt);
     }
 
     private void initialUnknownMask() {
         unknownMask = new StringBuilder();
-        for (int i = 0; i < unknown.length(); i++) {
+        for (int i = 0; i < unknownRandom.length(); i++) {
             unknownMask = unknownMask.append("*");
         }
     }

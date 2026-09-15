@@ -1,4 +1,4 @@
-package com.javarush.task.PetProject.Viselica01;
+package com.javarush.task.PetProject.Viselica01.Other;
 
 public class Menu {
 
